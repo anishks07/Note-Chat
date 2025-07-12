@@ -1,0 +1,10 @@
+Metadata-Version: 2.4
+Name: information-retreival-system
+Version: 0.1.0
+Summary: Add your description here
+Author: Anish Konda
+Author-email: anishkst25@gmail.com
+Requires-Python: >=3.13
+Description-Content-Type: text/markdown
+Dynamic: author
+Dynamic: author-email
