@@ -1,0 +1,9 @@
+README.md
+pyproject.toml
+setup.py
+information_retreival_system.egg-info/PKG-INFO
+information_retreival_system.egg-info/SOURCES.txt
+information_retreival_system.egg-info/dependency_links.txt
+information_retreival_system.egg-info/top_level.txt
+src/__init__.py
+src/helper.py
