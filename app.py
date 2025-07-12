@@ -1,11 +1,34 @@
 import streamlit as st
 from src.helper import get_pdf_text, get_text_chunks, get_vector_store, get_conversational_chain
 
+
+def user_input(user_question):
+    response = st.session_state.conversation({'question': user_question})
+    st.session_state.chatHistory = response['chat_history']
+    for i , message in enumerate(st.session_state.chatHistory):
+        if i % 2 == 0:
+            st.write(f"**User:** {message.content}")
+        else:
+            st.write(f"**AI:** {message.content}")
+
+
+
+
 def main():
     st.set_page_config("Information Retrieval")
     st.header("Information Retrieval System")
     
-    user_input = st.text_input("Ask a question about the uploaded documents:")
+    user_question = st.text_input("Ask a question about the uploaded documents:")
+    
+    if "converstion" not in st.session_state:
+        st.session_state.conversational_chain = None
+    if "chatHistory" not in st.session_state:
+        st.session_state.chatHistory = None
+    if user_question:
+        user_input(user_question)
+    
+    
+    
     with st.sidebar:
         st.title("Menu")
         pdf_docs= st.file_uploader("Upload your PDF documents and Click on the Submit & Process Button", type=["pdf"], accept_multiple_files=True)
