@@ -75,9 +75,9 @@ For now, I can help you understand how to use Doc LM:
   ]
 
   return (
-    <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-50 to-blue-50/30">
+    <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-50 to-blue-50/30 min-h-0">
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto p-6 min-h-0">
         {messages.length === 0 ? (
           <div className="h-full flex items-center justify-center">
             <div className="text-center max-w-2xl mx-auto">
@@ -177,7 +177,7 @@ For now, I can help you understand how to use Doc LM:
       </div>
 
       {/* Message Input */}
-      <div className="border-t border-gray-200/50 bg-white/50 backdrop-blur-sm p-6">
+      <div className="border-t border-gray-200/50 bg-white/50 backdrop-blur-sm p-6 flex-shrink-0">
         <div className="max-w-4xl mx-auto">
           <form onSubmit={handleSendMessage} className="flex gap-4">
             <div className="flex-1">
