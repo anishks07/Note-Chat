@@ -55,7 +55,7 @@ export default function ChatArea() {
         id: (Date.now() + 2).toString(),
         content: `I'd be happy to help you with that question about your documents! However, I notice you haven't uploaded any documents yet. Please upload some PDF documents using the sidebar, then I'll be able to answer questions about their content.
 
-For now, I can help you understand how to use Doc LM:
+For now, I can help you understand how to use Note Chat:
 • Upload PDF documents using the sidebar
 • Click "Process Documents" to analyze them
 • Then ask me any questions about the content!`,
@@ -87,7 +87,7 @@ For now, I can help you understand how to use Doc LM:
                 </svg>
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                Welcome to Doc LM!
+                Welcome to Note Chat!
               </h3>
               <p className="text-gray-600 mb-8 leading-relaxed">
                 Upload your PDF documents using the sidebar, process them, and start having intelligent conversations about their content.
@@ -155,7 +155,7 @@ For now, I can help you understand how to use Doc LM:
                           <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
                           <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                         </div>
-                        <span className="text-sm text-gray-500">Doc LM is thinking...</span>
+                        <span className="text-sm text-gray-500">Note Chat is thinking...</span>
                       </div>
                     ) : (
                       <>

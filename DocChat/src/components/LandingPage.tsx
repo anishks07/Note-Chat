@@ -12,12 +12,12 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
             <div className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden">
               <img 
                 src="/logo.png" 
-                alt="Doc LM Logo" 
+                alt="Note Chat Logo" 
                 className="w-full h-full object-contain"
               />
             </div>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              Doc LM
+              Note Chat
             </h1>
           </div>
           <button
@@ -38,7 +38,7 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
             Upload PDF documents and have intelligent conversations about their content. 
-            Doc LM uses advanced AI to understand and answer questions about your documents.
+            Note Chat uses advanced AI to understand and answer questions about your documents.
           </p>
           <button
             onClick={onGetStarted}
@@ -143,17 +143,17 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
             <div className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
               <img 
                 src="/logo.png" 
-                alt="Doc LM Logo" 
+                alt="Note Chat Logo" 
                 className="w-full h-full object-contain"
               />
             </div>
-            <h4 className="text-xl font-bold">Doc LM</h4>
+            <h4 className="text-xl font-bold">Note Chat</h4>
           </div>
           <p className="text-gray-400 mb-6">
             Intelligent document conversations powered by advanced AI
           </p>
           <p className="text-gray-500 text-sm">
-            © 2025 Doc LM. Made with ❤️ for better document experiences.
+            © 2025 Note Chat. Made with ❤️ for better document experiences.
           </p>
         </div>
       </footer>
