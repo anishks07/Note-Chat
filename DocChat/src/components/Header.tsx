@@ -22,11 +22,11 @@ export default function Header({ onToggleSidebar, onBackToHome, showSidebarToggl
           <div className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden">
             <img 
               src="/logo.png" 
-              alt="Doc LM Logo" 
+              alt="Note Chat Logo" 
               className="w-full h-full object-contain"
             />
           </div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Doc LM</h1>
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Note Chat</h1>
         </div>
         
         <div className="flex items-center gap-4">
