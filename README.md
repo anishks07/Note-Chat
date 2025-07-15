@@ -35,11 +35,11 @@ Information-Retrieval-System/
 ├── api.py                          # FastAPI backend server
 ├── app.py                          # Alternative app entry point
 ├── main.py                         # Main application entry
-├── requirements.txt                # Python dependencies
-├── pyproject.toml                  # Python project configuration
+├── requirements.txt                # Python dependencies (legacy)
+├── pyproject.toml                  # Python project configuration (uv)
 ├── setup.py                        # Package setup
 ├── template.py                     # Template configurations
-├── uv.lock                         # UV lock file
+├── uv.lock                         # UV lock file (dependency resolution)
 ├── src/                            # Python source code
 │   ├── __init__.py
 │   └── helper.py                   # Helper functions for PDF processing
@@ -70,6 +70,7 @@ Information-Retrieval-System/
 ### Prerequisites
 
 - Python 3.8+
+- uv (Python package manager)
 - Node.js 16+
 - npm or yarn
 
@@ -249,7 +250,7 @@ The frontend is built with modern React and TypeScript:
 pip install -r requirements.txt
 
 # Run production server
-python -m uvicorn api:app --host 0.0.0.0 --port 8000
+uv run uvicorn api:app --host 0.0.0.0 --port 8000
 ```
 
 **Frontend:**
