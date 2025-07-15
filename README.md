@@ -35,11 +35,11 @@ Information-Retrieval-System/
 ├── api.py                          # FastAPI backend server
 ├── app.py                          # Alternative app entry point
 ├── main.py                         # Main application entry
-├── requirements.txt                # Python dependencies (legacy)
-├── pyproject.toml                  # Python project configuration (uv)
+├── pyproject.toml                  # Python project configuration (uv managed)
+├── uv.lock                         # UV lock file (dependency resolution)
+├── requirements.txt                # Python dependencies (legacy/fallback)
 ├── setup.py                        # Package setup
 ├── template.py                     # Template configurations
-├── uv.lock                         # UV lock file (dependency resolution)
 ├── src/                            # Python source code
 │   ├── __init__.py
 │   └── helper.py                   # Helper functions for PDF processing
@@ -74,22 +74,37 @@ Information-Retrieval-System/
 - Node.js 16+
 - npm or yarn
 
+### Installing uv
+
+If you don't have `uv` installed, install it first:
+
+```bash
+# On macOS and Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# On Windows
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+# Or via pip (if you have Python already)
+pip install uv
+```
+
 ### Backend Setup
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/anishks07/Note-Chat.git
-   cd Note-Chat
+   git clone https://github.com/anishks07/Information-Retrieval-System.git
+   cd Information-Retrieval-System
    ```
 
-2. **Install Python dependencies**
+2. **Install Python dependencies and create virtual environment**
    ```bash
-   pip install -r requirements.txt
+   uv sync
    ```
 
 3. **Start the FastAPI server**
    ```bash
-   python -m uvicorn api:app --reload --host 0.0.0.0 --port 8000
+   uv run uvicorn api:app --reload --host 0.0.0.0 --port 8000
    ```
 
    The API will be available at `http://localhost:8000`
@@ -234,6 +249,30 @@ The backend uses FastAPI with the following key dependencies:
 - **LangChain**: LLM integration and document processing
 - **Vector Database**: For semantic search capabilities
 
+**Useful uv Commands for Development:**
+```bash
+# Install/sync dependencies from pyproject.toml
+uv sync
+
+# Add a new dependency
+uv add package-name
+
+# Add a development dependency
+uv add --dev package-name
+
+# Run Python commands in the virtual environment
+uv run python script.py
+
+# Run the server in development mode
+uv run uvicorn api:app --reload
+
+# Update dependencies
+uv lock --upgrade
+
+# Show project information
+uv show
+```
+
 ### Frontend Development
 
 The frontend is built with modern React and TypeScript:
@@ -246,8 +285,8 @@ The frontend is built with modern React and TypeScript:
 
 **Backend:**
 ```bash
-# Install dependencies
-pip install -r requirements.txt
+# Install dependencies and setup environment
+uv sync
 
 # Run production server
 uv run uvicorn api:app --host 0.0.0.0 --port 8000
