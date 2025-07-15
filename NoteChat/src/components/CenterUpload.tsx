@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { api } from '../config/api'
 
 interface CenterUploadProps {
   onFilesUploaded: (files: string[]) => void
@@ -6,8 +7,9 @@ interface CenterUploadProps {
 
 export default function CenterUpload({ onFilesUploaded }: CenterUploadProps) {
   const [isDragOver, setIsDragOver] = useState(false)
-  const [uploadedFiles, setUploadedFiles] = useState<string[]>([])
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
   const [isProcessing, setIsProcessing] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
@@ -24,27 +26,32 @@ export default function CenterUpload({ onFilesUploaded }: CenterUploadProps) {
     setIsDragOver(false)
     const files = Array.from(e.dataTransfer.files)
     const pdfFiles = files.filter(file => file.type === 'application/pdf')
-    const newFiles = pdfFiles.map(f => f.name)
-    setUploadedFiles(prev => [...prev, ...newFiles])
+    setUploadedFiles(prev => [...prev, ...pdfFiles])
   }
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
-    const newFiles = files.map(f => f.name)
-    setUploadedFiles(prev => [...prev, ...newFiles])
+    const pdfFiles = files.filter(file => file.type === 'application/pdf')
+    setUploadedFiles(prev => [...prev, ...pdfFiles])
   }
 
   const removeFile = (index: number) => {
     setUploadedFiles(prev => prev.filter((_, i) => i !== index))
   }
 
-  const handleProcess = () => {
+  const handleProcess = async () => {
     setIsProcessing(true)
-    // Simulate processing
-    setTimeout(() => {
+    setError(null)
+    
+    try {
+      await api.uploadFiles(uploadedFiles)
+      const fileNames = uploadedFiles.map(file => file.name)
+      onFilesUploaded(fileNames)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Upload failed')
+    } finally {
       setIsProcessing(false)
-      onFilesUploaded(uploadedFiles)
-    }, 2000)
+    }
   }
 
   return (
@@ -112,7 +119,7 @@ export default function CenterUpload({ onFilesUploaded }: CenterUploadProps) {
             </div>
             
             <div className="space-y-2">
-              {uploadedFiles.map((fileName, index) => (
+              {uploadedFiles.map((file, index) => (
                 <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
                   <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
                     <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -121,7 +128,7 @@ export default function CenterUpload({ onFilesUploaded }: CenterUploadProps) {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-900 truncate">
-                      {fileName}
+                      {file.name}
                     </p>
                     <p className="text-xs text-gray-500">PDF Document</p>
                   </div>
@@ -135,6 +142,18 @@ export default function CenterUpload({ onFilesUploaded }: CenterUploadProps) {
                   </button>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-4">
+            <div className="flex items-center">
+              <svg className="w-5 h-5 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <p className="text-red-700 text-sm font-medium">{error}</p>
             </div>
           </div>
         )}

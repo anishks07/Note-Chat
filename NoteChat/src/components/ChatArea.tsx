@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { api } from '../config/api'
 
 interface Message {
   id: string
@@ -8,10 +9,15 @@ interface Message {
   isTyping?: boolean
 }
 
-export default function ChatArea() {
+interface ChatAreaProps {
+  isDocumentsProcessed: boolean
+}
+
+export default function ChatArea({ isDocumentsProcessed }: ChatAreaProps) {
   const [messages, setMessages] = useState<Message[]>([])
   const [inputValue, setInputValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -22,9 +28,14 @@ export default function ChatArea() {
     scrollToBottom()
   }, [messages])
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!inputValue.trim() || isLoading) return
+
+    if (!isDocumentsProcessed) {
+      setError('Please upload and process documents first.')
+      return
+    }
 
     const newMessage: Message = {
       id: Date.now().toString(),
@@ -34,8 +45,10 @@ export default function ChatArea() {
     }
 
     setMessages(prev => [...prev, newMessage])
+    const currentQuestion = inputValue
     setInputValue('')
     setIsLoading(true)
+    setError(null)
 
     // Add typing indicator
     const typingMessage: Message = {
@@ -47,24 +60,34 @@ export default function ChatArea() {
     }
     setMessages(prev => [...prev, typingMessage])
 
-    // Simulate AI response
-    setTimeout(() => {
+    try {
+      const response = await api.askQuestion(currentQuestion)
+      
+      // Remove typing indicator
       setMessages(prev => prev.filter(msg => !msg.isTyping))
       
       const aiResponse: Message = {
         id: (Date.now() + 2).toString(),
-        content: `I'd be happy to help you with that question about your documents! However, I notice you haven't uploaded any documents yet. Please upload some PDF documents using the sidebar, then I'll be able to answer questions about their content.
-
-For now, I can help you understand how to use Note Chat:
-• Upload PDF documents using the sidebar
-• Click "Process Documents" to analyze them
-• Then ask me any questions about the content!`,
+        content: response.answer,
         isUser: false,
         timestamp: new Date()
       }
       setMessages(prev => [...prev, aiResponse])
+    } catch (err) {
+      // Remove typing indicator
+      setMessages(prev => prev.filter(msg => !msg.isTyping))
+      
+      const errorMessage: Message = {
+        id: (Date.now() + 2).toString(),
+        content: 'Sorry, I encountered an error while processing your question. Please try again.',
+        isUser: false,
+        timestamp: new Date()
+      }
+      setMessages(prev => [...prev, errorMessage])
+      setError(err instanceof Error ? err.message : 'Failed to get response')
+    } finally {
       setIsLoading(false)
-    }, 2000)
+    }
   }
 
   const suggestedQuestions = [
@@ -87,11 +110,13 @@ For now, I can help you understand how to use Note Chat:
                 </svg>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">
-                Welcome to Note Chat!
+                {isDocumentsProcessed ? 'Ready to Chat!' : 'Welcome to Note Chat!'}
               </h3>
               <p className="text-gray-600 mb-6 leading-relaxed text-sm">
-                Upload your PDF documents using the sidebar, process them, and start having intelligent conversations about their content.
-              </p>
+                {isDocumentsProcessed 
+                  ? 'Your documents have been processed! Ask me anything about their content.'
+                  : 'Upload your PDF documents using the sidebar, process them, and start having intelligent conversations about their content.'
+                }</p>
               
               {/* Suggested Questions */}
               <div className="text-left">
@@ -179,6 +204,26 @@ For now, I can help you understand how to use Note Chat:
       {/* Message Input */}
       <div className="border-t border-gray-200/50 bg-white/50 backdrop-blur-sm p-4 flex-shrink-0">
         <div className="max-w-3xl mx-auto">
+          {/* Error Display */}
+          {error && (
+            <div className="mb-3 bg-red-50 border border-red-200 rounded-lg p-3">
+              <div className="flex items-center">
+                <svg className="w-4 h-4 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p className="text-red-700 text-sm">{error}</p>
+                <button 
+                  onClick={() => setError(null)}
+                  className="ml-auto text-red-400 hover:text-red-600"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          )}
+          
           <form onSubmit={handleSendMessage} className="flex gap-3">
             <div className="flex-1">
               <input
