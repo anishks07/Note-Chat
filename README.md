@@ -1,4 +1,4 @@
-# Information Retrieval System
+# Note-Chat
 
 A comprehensive AI-powered document analysis and chat system that allows users to upload PDF documents and have intelligent conversations about their content.
 
@@ -31,7 +31,7 @@ The system consists of two main components:
 ## 📁 Project Structure
 
 ```
-Information-Retrieval-System/
+Note-Chat/
 ├── api.py                          # FastAPI backend server
 ├── app.py                          # Alternative app entry point
 ├── main.py                         # Main application entry
@@ -93,8 +93,8 @@ pip install uv
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/anishks07/Information-Retrieval-System.git
-   cd Information-Retrieval-System
+   git clone https://github.com/anishks07/Note-Chat.git
+   cd Note-Chat
    ```
 
 2. **Install Python dependencies and create virtual environment**
