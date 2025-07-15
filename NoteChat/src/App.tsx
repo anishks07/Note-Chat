@@ -10,10 +10,12 @@ function App() {
   const [showLanding, setShowLanding] = useState(true)
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([])
   const [showChat, setShowChat] = useState(false)
+  const [isDocumentsProcessed, setIsDocumentsProcessed] = useState(false)
 
   const handleFilesUploaded = (files: string[]) => {
     setUploadedFiles(files)
     setShowChat(true)
+    setIsDocumentsProcessed(true)
   }
 
   if (showLanding) {
@@ -43,7 +45,7 @@ function App() {
         
         {/* Content Area */}
         {showChat ? (
-          <ChatArea />
+          <ChatArea isDocumentsProcessed={isDocumentsProcessed} />
         ) : (
           <CenterUpload onFilesUploaded={handleFilesUploaded} />
         )}
