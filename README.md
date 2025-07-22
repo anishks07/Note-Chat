@@ -231,13 +231,59 @@ console.log(data.answer, data.chat_history);
 - Type-safe API calls
 - Error handling and response parsing
 
+## 📖 Documentation
+
+- **[Complete Workflow Guide](WORKFLOW.md)**: Detailed visual walkthrough with step-by-step screenshots
+- **[Frontend Documentation](NoteChat/README.md)**: React frontend specific documentation
+- **API Documentation**: Available at `http://localhost:8000/docs` when running the server
+
 ## 🎯 Usage Workflow
+
+The application follows a streamlined workflow for document analysis and interaction:
 
 1. **Landing Page**: Users are greeted with a welcome screen
 2. **File Upload**: Users upload PDF documents via drag-and-drop or file selection
 3. **Processing**: Backend processes documents and creates vector embeddings
 4. **Chat Interface**: Users can ask questions about their documents
 5. **AI Responses**: System provides intelligent answers based on document content
+
+### 📸 Visual Workflow Guide
+
+Below are the step-by-step screenshots showing the complete user journey through the Note-Chat application:
+
+#### Step 1: Landing Page
+![Landing Page](notechatimg/1.png)
+*Welcome screen where users begin their document analysis journey*
+
+#### Step 2: Initial Interface
+![Initial Interface](notechatimg/2.png)
+*Clean interface ready for document upload*
+
+#### Step 3: File Upload Interface
+![File Upload](notechatimg/3.png)
+*Drag-and-drop area for PDF document upload*
+
+#### Step 4: Document Processing
+![Document Processing](notechatimg/4.png)
+*System processing uploaded documents and creating embeddings*
+
+#### Step 5: Chat Interface Ready
+![Chat Ready](notechatimg/5.png)
+*Interface ready for user questions about uploaded documents*
+
+#### Step 6: User Query
+![User Query](notechatimg/6.png)
+*User asking questions about the document content*
+
+#### Step 7: AI Response
+![AI Response](notechatimg/7.png)
+*AI-powered responses based on document analysis*
+
+#### Step 8: Continued Conversation
+![Continued Chat](notechatimg/8.png)
+*Ongoing conversation with contextual understanding*
+
+> 📚 **For a more detailed explanation of each step, see the [Complete Workflow Documentation](WORKFLOW.md)**
 
 ## 🛠️ Development
 
