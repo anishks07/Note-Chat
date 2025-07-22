@@ -320,6 +320,105 @@ npm run preview
 4. **Response Generation**: LLM generates answers based on document content
 5. **History Tracking**: Conversation history is maintained for context
 
+## 🔄 Using OpenAI Instead of Groq (Alternative Setup)
+
+By default, this project uses **Groq** for LLM and **HuggingFace** for embeddings. If you prefer to use **OpenAI** instead, follow these steps:
+
+### 1. Install OpenAI Dependencies
+
+```bash
+# Add OpenAI integration
+uv add langchain-openai
+
+# Remove Groq and HuggingFace (optional)
+uv remove langchain-groq langchain-huggingface
+```
+
+### 2. Update Environment Variables
+
+Add your OpenAI API key to `.env`:
+```bash
+OPENAI_API_KEY="sk-your-actual-openai-api-key-here"
+```
+
+### 3. Update `src/helper.py`
+
+Replace the imports and model configurations:
+
+**Current (Groq + HuggingFace):**
+```python
+from langchain_groq import ChatGroq
+from langchain_huggingface import HuggingFaceEmbeddings
+
+def get_vector_store(chunks):
+    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    vector_store = FAISS.from_texts(chunks, embeddings)
+    return vector_store
+
+def get_conversational_chain(vector_store):
+    llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0)
+    # ... rest of the function
+```
+
+**Change to (OpenAI):**
+```python
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+
+def get_vector_store(chunks):
+    embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
+    vector_store = FAISS.from_texts(chunks, embeddings)
+    return vector_store
+
+def get_conversational_chain(vector_store):
+    llm = ChatOpenAI(model="gpt-4", temperature=0)  # or "gpt-3.5-turbo"
+    # ... rest of the function
+```
+
+### 4. Update Environment Loading
+
+In `src/helper.py`, change the environment variable loading:
+
+**From:**
+```python
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+if GROQ_API_KEY:
+    os.environ["GROQ_API_KEY"] = GROQ_API_KEY
+```
+
+**To:**
+```python
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+if OPENAI_API_KEY:
+    os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+```
+
+### 5. Restart the Server
+
+```bash
+uv run uvicorn api:app --reload --host 0.0.0.0 --port 8000
+```
+
+### Why Choose OpenAI vs Groq?
+
+**OpenAI Advantages:**
+- More mature API with extensive documentation
+- Higher quality embeddings with `text-embedding-3-small`
+- Access to latest GPT models (GPT-4, GPT-4-turbo)
+- Better integration with some LangChain features
+
+**Groq Advantages:**
+- Faster inference speed
+- Often more cost-effective
+- Good open-source model support (Llama, Mixtral)
+- HuggingFace embeddings are free (no API key required)
+
+**Cost Considerations:**
+- **Groq**: Pay per token, often cheaper for inference
+- **OpenAI**: Pay per token for both LLM and embeddings
+- **HuggingFace Embeddings**: Free (runs locally)
+
+Choose based on your specific needs for speed, cost, and model quality.
+
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -337,4 +436,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - FastAPI for the excellent web framework
 - React team for the powerful frontend library
 - LangChain for LLM integration capabilities
+- Groq for fast LLM inference
+- HuggingFace for free embedding models
 - Tailwind CSS for the beautiful styling system

@@ -3,18 +3,19 @@ from PyPDF2 import PdfReader
 from dotenv import load_dotenv
 
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI  # ✅ Updated imports
+from langchain_groq import ChatGroq  # ✅ Updated to use Groq
+from langchain_huggingface import HuggingFaceEmbeddings  # ✅ Updated to use HuggingFace embeddings
 from langchain_community.vectorstores import FAISS
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 
 # Load environment variables
 load_dotenv()
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 # Set API key in environment if not already set
-if OPENAI_API_KEY:
-    os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+if GROQ_API_KEY:
+    os.environ["GROQ_API_KEY"] = GROQ_API_KEY
 
 
 def get_pdf_text(pdf_docs):
@@ -33,13 +34,15 @@ def get_text_chunks(text):
 
 
 def get_vector_store(chunks):
-    embeddings = OpenAIEmbeddings(model="text-embedding-3-small")  # ✅ From langchain-openai
+    # Using HuggingFace embeddings (free, no API key required)
+    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     vector_store = FAISS.from_texts(chunks, embeddings)
     return vector_store
 
 
 def get_conversational_chain(vector_store):
-    llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0)  # ✅ From langchain-openai
+    # Using Groq LLM with correct model parameter name
+    llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0)  # ✅ Updated to use ChatGroq
     memory = ConversationBufferMemory(
         memory_key="chat_history",
         return_messages=True,
